@@ -1,0 +1,31 @@
+# Node & Vite
+node_modules/
+client/node_modules/
+server/node_modules/
+idea-app/frontend/node_modules/
+
+# Build outputs
+/dist/
+client/dist/
+idea-app/frontend/dist/
+
+# Env files
+.env
+.env.*
+client/.env
+client/.env.*
+server/.env
+server/.env.*
+
+# Logs & coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+coverage/
+
+# Editor/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
