@@ -31,6 +31,7 @@ A modern web application that helps you generate, organize, and develop business
 - Express.js
 - MongoDB (Database)
 - JWT Authentication
+- IBM Watsonx.ai (LLM) via `ibm-cloud-sdk-core`
 
 ## 🚀 Getting Started
 
@@ -74,6 +75,16 @@ PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 NODE_ENV=development
+
+ # IBM Watsonx.ai (required for AI features)
+ WATSON_API_KEY=your_ibm_watson_api_key
+ WATSON_URL=https://api.us-east.ml.cloud.ibm.com
+ WATSON_PROJECT_ID=your_watson_project_id
+ # Optional: choose a model (defaults to ibm/granite-13b-chat-v2)
+ WATSON_MODEL=ibm/granite-13b-chat-v2
+
+ # RAG/Embeddings (optional; set true to skip seeding if quotas limited)
+ RAG_SKIP_SEED=true
 ```
 
 ### Running Locally
@@ -152,6 +163,8 @@ Your site will be live at: `https://YOUR-USERNAME.github.io/smart-idea-finder`
 5. Add environment variables in settings
 6. Deploy!
 
+> Note: Include `WATSON_API_KEY`, `WATSON_URL`, `WATSON_PROJECT_ID`, and optional `WATSON_MODEL` in the service's environment variables so AI endpoints work in production.
+
 ### Connect Frontend to Backend
 
 Create `client/.env.production`:
@@ -188,6 +201,14 @@ smart-idea-finder/
 The app uses JWT (JSON Web Tokens) for secure authentication. Tokens are stored in localStorage and sent with each API request.
 
 ## 💡 Features in Detail
+
+### IBM Watsonx.ai Setup
+
+- Create an IBM Cloud account and provision Watsonx.ai
+- Retrieve your API key and service URL, then set `WATSON_API_KEY` and `WATSON_URL`
+- (Optional) create a project and set `WATSON_PROJECT_ID`
+- The server uses `watsonService.js` to call the model; default model is `ibm/granite-13b-chat-v2`
+- If Watson credentials are missing, API calls will fail; ensure the env vars are configured
 
 ### AI Idea Generator
 
