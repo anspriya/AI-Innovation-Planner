@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef's Theater - Where Food Comes Alive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff6b6b; }
+            to { text-shadow: 0 0 30px #fff, 0 0 40px #ff6b6b, 0 0 50px #ff6b6b; }
+        }
+
+        .tagline {
+            color: #f8f9fa;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .theater-stage {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .chef-spotlight {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff9a56, #ffad56);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .chef-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            margin-right: 20px;
+            animation: bounce 3s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .chef-info h3 {
+            margin-bottom: 5px;
+            font-size: 1.5em;
+        }
+
+        .cooking-status {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .status-active { background: #2ed573; color: white; }
+        .status-busy { background: #ffa502; color: white; }
+        .status-special { background: #3742fa; color: white; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .dish-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .dish-image {
+            height: 200px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dish-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .dish-info {
+            padding: 20px;
+        }
+
+        .dish-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .dish-description {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .dish-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .cook-time {
+            background: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #2c3e50;
+        }
+
+        .popularity-meter {
+            height: 5px;
+            background: #ecf0f1;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .popularity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+            border-radius: 3px;
+            animation: fillUp 2s ease-out;
+        }
+
+        @keyframes fillUp {
+            from { width: 0%; }
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .order-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .order-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .special-offers {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .special-offers h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .offer-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            right: -350px;
+            top: 0;
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .cart-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-counter {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .logo { font-size: 2em; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .chef-spotlight { flex-direction: column; text-align: center; }
+            .chef-avatar { margin-right: 0; margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">🎭 Chef's Theater</h1>
+            <p class="tagline">Where Every Meal is a Performance</p>
+            <div class="live-indicator">🔴 LIVE Kitchen</div>
+        </header>
+
+        <div class="theater-stage">
+            <div class="chef-spotlight">
+                <div class="chef-avatar">👨‍🍳</div>
+                <div class="chef-info">
+                    <h3>Chef Marco's Kitchen</h3>
+                    <p>Live from our theatrical kitchen! Watch your meal come to life.</p>
+                    <div class="cooking-status">
+                        <span class="status-badge status-active">🔥 Cooking Live</span>
+                        <span class="status-badge status-special">⭐ Chef's Special Available</span>
+                        <span class="status-badge status-busy">📦 12 orders in queue</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="special-offers">
+                <h3>🎪 Today's Theater Specials</h3>
+                <div class="offers-grid">
+                    <div class="offer-card">
+                        <h4>Dinner Show Deal</h4>
+                        <p>Order 2 mains + get dessert show FREE!</p>
+                    </div>
+                    <div class="offer-card">
+                        <h4>Rush Hour Express</h4>
+                        <p>15-min guarantee or 20% off</p>
+                    </div>
+                    <div class="offer-card">
+                        <h4>Chef's Mystery Box</h4>
+                        <p>Surprise 3-course meal at $25</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🍽️ Tonight's Performance Menu</h2>
+            
+            <div class="menu-grid" id="menuGrid">
+                <!-- Menu items will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-toggle" onclick="toggleCart()">
+        🛒
+        <span class="cart-counter" id="cartCounter">0</span>
+    </div>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <h3 style="margin-bottom: 20px; color: #2c3e50;">Your Theater Order</h3>
+        <div id="cartItems"></div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ecf0f1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <strong>Total: $<span id="cartTotal">0.00</span></strong>
+            </div>
+            <button class="order-btn" onclick="checkout()" style="margin-top: 10px;">
+                🎭 Complete Order
+            </button>
+        </div>
+    </div>
+
+    <div class="modal" id="dishModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let cartTotal = 0;
+
+        const dishes = [
+            {
+                id: 1,
+                name: "Theatrical Truffle Pasta",
+                description: "Hand-rolled pasta with black truffle, performed tableside with flaming herbs",
+                price: 28.99,
+                emoji: "🍝",
+                cookTime: "18 mins",
+                popularity: 95,
+                category: "mains",
+                ingredients: ["Fresh pasta", "Black truffle", "Parmesan", "Herbs"],
+                allergens: ["Gluten", "Dairy"]
+            },
+            {
+                id: 2,
+                name: "Dragon's Breath Steak",
+                description: "Prime ribeye with smoky presentation and molecular gastronomy sides",
+                price: 45.99,
+                emoji: "🥩",
+                cookTime: "25 mins",
+                popularity: 88,
+                category: "mains",
+                ingredients: ["Prime ribeye", "Molecular spheres", "Smoke essence"],
+                allergens: ["None"]
+            },
+            {
+                id: 3,
+                name: "Levitating Salmon",
+                description: "Atlantic salmon with floating vegetables and gravity-defying sauce",
+                price: 32.99,
+                emoji: "🐟",
+                cookTime: "20 mins",
+                popularity: 92,
+                category: "mains",
+                ingredients: ["Atlantic salmon", "Seasonal vegetables", "Anti-gravity sauce"],
+                allergens: ["Fish"]
+            },
+            {
+                id: 4,
+                name: "Enchanted Garden Salad",
+                description: "Living salad with edible flowers that bloom before your eyes",
+                price: 18.99,
+                emoji: "🥗",
+                cookTime: "12 mins",
+                popularity: 78,
+                category: "appetizers",
+                ingredients: ["Mixed greens", "Edible flowers", "Magic vinaigrette"],
+                allergens: ["None"]
+            },
+            {
+                id: 5,
+                name: "Disappearing Dessert",
+                description: "Chocolate soufflé that vanishes and reappears with raspberry surprise",
+                price: 15.99,
+                emoji: "🍰",
+                cookTime: "30 mins",
+                popularity: 97,
+                category: "desserts",
+                ingredients: ["Dark chocolate", "Raspberry essence", "Magic powder"],
+                allergens: ["Dairy", "Eggs"]
+            },
+            {
+                id: 6,
+                name: "Phoenix Fire Wings",
+                description: "Chicken wings that ignite with special spices, served with cooling magic",
+                price: 22.99,
+                emoji: "🔥",
+                cookTime: "15 mins",
+                popularity: 85,
+                category: "appetizers",
+                ingredients: ["Chicken wings", "Phoenix spices", "Cooling gel"],
+                allergens: ["None"]
+            }
+        ];
+
+        function renderDishes() {
+            const menuGrid = document.getElementById('menuGrid');
+            menuGrid.innerHTML = '';
+
+            dishes.forEach(dish => {
+                const dishCard = document.createElement('div');
+                dishCard.className = 'dish-card';
+                dishCard.innerHTML = `
+                    <div class="dish-image">${dish.emoji}</div>
+                    <div class="dish-info">
+                        <h3 class="dish-title">${dish.name}</h3>
+                        <p class="dish-description">${dish.description}</p>
+                        <div class="dish-meta">
+                            <span class="price">$${dish.price}</span>
+                            <span class="cook-time">⏱️ ${dish.cookTime}</span>
+                        </div>
+                        <div class="popularity-meter">
+                            <div class="popularity-fill" style="width: ${dish.popularity}%"></div>
+                        </div>
+                        <p style="font-size: 0.8em; color: #7f8c8d; margin-bottom: 10px;">
+                            ${dish.popularity}% customer satisfaction
+                        </p>
+                        <button class="order-btn" onclick="showDishModal(${dish.id})">
+                            ✨ Experience This Dish
+                        </button>
+                    </div>
+                `;
+                menuGrid.appendChild(dishCard);
+            });
+        }
+
+        function showDishModal(dishId) {
+            const dish = dishes.find(d => d.id === dishId);
+            const modal = document.getElementById('dishModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 4em; margin-bottom: 15px;">${dish.emoji}</div>
+                    <h2 style="margin-bottom: 10px; color: #2c3e50;">${dish.name}</h2>
+                    <p style="color: #7f8c8d; margin-bottom: 20px; line-height: 1.6;">${dish.description}</p>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 10px; color: #2c3e50;">🎭 Performance Details</h4>
+                        <p><strong>Cook Time:</strong> ${dish.cookTime}</p>
+                        <p><strong>Popularity:</strong> ${dish.popularity}% ⭐</p>
+                        <p><strong>Ingredients:</strong> ${dish.ingredients.join(', ')}</p>
+                        <p><strong>Allergens:</strong> ${dish.allergens.join(', ')}</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <button onclick="changeQuantity(-1)" style="width: 40px; height: 40px; border: none; background: #ecf0f1; border-radius: 50%; cursor: pointer; font-size: 1.2em;">-</button>
+                        <span style="font-size: 1.2em; margin: 0 15px;">Qty: <span id="modalQuantity">1</span></span>
+                        <button onclick="changeQuantity(1)" style="width: 40px; height: 40px; border: none; background: #ecf0f1; border-radius: 50%; cursor: pointer; font-size: 1.2em;">+</button>
+                    </div>
+                    
+                    <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 20px; color: #e74c3c;">
+                        Total: $<span id="modalPrice">${dish.price}</span>
+                    </div>
+                    
+                    <button class="order-btn" onclick="addToCart(${dish.id})" style="width: 100%;">
+                        🎪 Add to Cart
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('dishModal').style.display = 'none';
+        }
+
+        function changeQuantity(change) {
+            const quantityEl = document.getElementById('modalQuantity');
+            const priceEl = document.getElementById('modalPrice');
+            let quantity = parseInt(quantityEl.textContent) + change;
+            
+            if (quantity < 1) quantity = 1;
+            if (quantity > 10) quantity = 10;
+            
+            quantityEl.textContent = quantity;
+            
+            const dishId = parseInt(document.querySelector('.order-btn[onclick*="addToCart"]').onclick.toString().match(/\d+/)[0]);
+            const dish = dishes.find(d => d.id === dishId);
+            priceEl.textContent = (dish.price * quantity).toFixed(2);
+        }
+
+        function addToCart(dishId) {
+            const dish = dishes.find(d => d.id === dishId);
+            const quantity = parseInt(document.getElementById('modalQuantity').textContent);
+            
+            const existingItem = cart.find(item => item.id === dishId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    ...dish,
+                    quantity: quantity
+                });
+            }
+            
+            updateCart();
+            closeModal();
+            
+            // Show success animation
+            showToast(`✨ ${dish.name} added to your theater!`);
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartCounter = document.getElementById('cartCounter');
+            const cartTotalEl = document.getElementById('cartTotal');
+            
+            cartItems.innerHTML = '';
+            cartTotal = 0;
+            let totalItems = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                cartTotal += itemTotal;
+                totalItems += item.quantity;
+                
+                const cartItem = document.createElement('div');
+                cartItem.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #ecf0f1;';
+                cartItem.innerHTML = `
+                    <div>
+                        <div style="font-weight: bold; margin-bottom: 5px;">${item.emoji} ${item.name}</div>
+                        <div style="color: #7f8c8d; font-size: 0.9em;">$${item.price} × ${item.quantity}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">$${itemTotal.toFixed(2)}</div>
+                        <button onclick="removeFromCart(${item.id})" style="background: #e74c3c; color: white; border: none; padding: 2px 8px; border-radius: 5px; cursor: pointer; font-size: 0.8em;">Remove</button>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            cartCounter.textContent = totalItems;
+            cartTotalEl.textContent = cartTotal.toFixed(2);
+        }
+
+        function removeFromCart(dishId) {
+            cart = cart.filter(item => item.id !== dishId);
+            updateCart();
+        }
+
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cartSidebar');
+            cartSidebar.classList.toggle('open');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast('🎭 Your theater is empty! Add some performances first.');
+                return;
+            }
+            
+            showToast(`🎉 Order placed! Total: $${cartTotal.toFixed(2)}. The show begins in 20 minutes!`);
+            cart = [];
+            updateCart();
+            toggleCart();
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #667eea, #764ba2);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+            `;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations for toast
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('dishModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the app
+        renderDishes();
+        
+        // Simulate live kitchen updates
+        setInterval(() => {
+            const statusBadges = document.querySelectorAll('.status-badge');
+            const orderCount = Math.floor(Math.random() * 20) + 5;
+            statusBadges[2].textContent = `📦 ${orderCount} orders in queue`;
+        }, 10000);
+    </script>
+</body>
+</html>
