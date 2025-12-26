@@ -639,6 +639,31 @@ Format as a JSON object with slides array.`;
 					visualSuggestion: item.visual_suggestions || item['Visual Suggestions'] || item.visualSuggestion || item.visual_suggestion || '',
 					...item
 				}));
+			} else if (parsed.Slides && Array.isArray(parsed.Slides)) {
+				// Watson returns {"Slides": [{"Slide 1: Cover Slide": {...}}, {"Slide 2: Problem": {...}}]}
+				slides = parsed.Slides.map((item, idx) => {
+					// Each item is {"Slide N: Title": {...slideData}}
+					const slideKey = Object.keys(item).find(k => k.includes('Slide'));
+					if (slideKey) {
+						const slideData = item[slideKey];
+						return {
+							title: slideKey,
+							headline: slideData.Headline || slideData.headline || slideKey,
+							keyPoints: slideData['Key Points'] || slideData.keyPoints || [],
+							supportingData: slideData['Supporting Data'] || slideData.supportingData || '',
+							visualSuggestion: slideData['Visual Suggestions'] || slideData['Visual Suggestion'] || slideData.visualSuggestion || '',
+							...slideData
+						};
+					}
+					// Fallback
+					return {
+						title: item.title || `Slide ${idx + 1}`,
+						headline: item.headline || '',
+						keyPoints: item.keyPoints || [],
+						supportingData: item.supportingData || '',
+						visualSuggestion: item.visualSuggestion || ''
+					};
+				});
 			} else if (Array.isArray(parsed)) {
 				// Watson returns [{ "Slide 1: ...": {...}, "Slide 2: ...": {...} }]
 				if (parsed.length > 0 && typeof parsed[0] === 'object') {

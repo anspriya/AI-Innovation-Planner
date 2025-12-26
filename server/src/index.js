@@ -12,7 +12,7 @@ import path from 'path';
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Connect to MongoDB
