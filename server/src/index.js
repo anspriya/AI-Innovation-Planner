@@ -18,8 +18,12 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB(process.env.MONGODB_URI || 'mongodb://localhost:27017/smartideafinder');
 
-// Initialize RAG knowledge base
-initializeKnowledgeBase().catch(console.error);
+// Initialize RAG knowledge base (optional)
+if (process.env.RAG_SKIP_SEED === 'true') {
+	console.log('⚙️  RAG seeding skipped (RAG_SKIP_SEED=true)');
+} else {
+	initializeKnowledgeBase().catch(console.error);
+}
 
 // API routes
 app.use('/api/ideas', ideasRoutes);
